@@ -1,12 +1,12 @@
-function saveit(name,object,tab)
+function saveit(name,object,tabs)
 	local type=type
 	local tostring=tostring
 	local string=string
-	if not tab then tab = "" end
-	
-	local output = tab..name.." = {" .. "\n"
-	
-	local function serializeKey(k) -- optimizing return string for number values
+	if not tabs then tabs = "" end
+
+	local output = tabs..name.." = {" .. "\n"
+
+	local function serializeKeyForTable(k) -- optimizing return string for number values
 		if type(k)=="number" then
 			return "[" .. k .. "]" -- return /[1337]/	if number
 		end
@@ -15,8 +15,8 @@ function saveit(name,object,tab)
 		end
 		return k -- return /leet/	if string
 	end
-	
-	local function key_number(k,v)
+
+	local function serializeKey(k,v)
 		if type(k)=="number" then
 			return "\t"
 		end
@@ -25,27 +25,24 @@ function saveit(name,object,tab)
 		end
 		return "\t" .. k .. " = "
 	end
-	
-	local currentTabs = tab
-	
-	for k,v in pairs(object) do
-		local the_type = type(v)
-		local old_k = k
-		local k_asString = serializeKey(k)
 
-		if the_type == "string" then
-			output = output .. currentTabs .. key_number(old_k,v) .. string.format("%q",v)
-		elseif the_type == "table" then
-			output = output .. saveit(serializeKey(k), v, currentTabs.."\t")
-		elseif the_type == "number" then
-			output = output .. currentTabs .. key_number(old_k,v) .. v
-		elseif the_type == "boolean" then
-			output = output .. currentTabs .. key_number(old_k,v) .. tostring(object[k])
+
+	for k,v in pairs(object) do
+		local valueType = type(v)
+
+		if valueType == "string" then
+			output = output .. tabs .. serializeKey(k,v) .. string.format("%q",v)
+		elseif valueType == "table" then
+			output = output .. saveit(serializeKeyForTable(k), v, tabs.."\t")
+		elseif valueType == "number" then
+			output = output .. tabs .. serializeKey(k,v) .. v
+		elseif valueType == "boolean" then
+			output = output .. tabs .. serializeKey(k,v) .. tostring(object[k])
 		else
-			output = output .. currentTabs .. key_number(old_k,v) .. "\"" .. the_type .. ": " .. tostring(object[k]) .. "\"" -- I believe there were good reasons not to use /v/
+			output = output .. tabs .. serializeKey(k,v) .. "\"" .. valueType .. ": " .. tostring(object[k]) .. "\"" -- I believe there were good reasons not to use /v/
 		end
 		
-		if next(object,old_k) then
+		if next(object,k) then
 			output = output .. ",\n"
 		else
 			output = output .. "\n"
@@ -53,5 +50,5 @@ function saveit(name,object,tab)
 
 	end
 
-	return output .. currentTabs .. "}"
+	return output .. tabs .. "}"
 end
