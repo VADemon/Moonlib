@@ -1,16 +1,16 @@
-function saveit(name,object,tabs)
+function table.serialize(name,object,tabs)
 	if not tabs then tabs = "" end
 
 	local output = tabs..name.." = {" .. "\n"
 
-	local function serializeKeyForTable(k) -- optimizing return string for number values
+	local function serializeKeyForTable(k)
 		if type(k)=="number" then
 			return "[" .. k .. "]" -- return /[1337]/	if number
 		end
-		if string.find(k,"[^A-z_-]") then -- contains special symbols?
+		if string.find(k,"[^A-z_-]") then -- special symbols?
 			return "[\"" .. k .. "\"]"
 		end
-		return k -- return /leet/	if string
+		return k -- /leet/	if string
 	end
 
 	local function serializeKey(k)
@@ -30,13 +30,13 @@ function saveit(name,object,tabs)
 		if valueType == "string" then
 			output = output .. tabs .. serializeKey(k) .. string.format("%q",v)
 		elseif valueType == "table" then
-			output = output .. saveit(serializeKeyForTable(k), v, tabs.."\t")
+			output = output .. table.serialize(serializeKeyForTable(k), v, tabs.."\t")
 		elseif valueType == "number" then
 			output = output .. tabs .. serializeKey(k) .. v
 		elseif valueType == "boolean" then
 			output = output .. tabs .. serializeKey(k) .. tostring(v)
 		else
-			output = output .. tabs .. serializeKey(k) .. "\"" .. valueType .. ": " .. tostring(v) .. "\"" -- I believe there were good reasons not to use /v/
+			output = output .. tabs .. serializeKey(k) .. "\"" .. valueType .. ": " .. tostring(v) .. "\""
 		end
 		
 		if next(object,k) then
@@ -44,8 +44,7 @@ function saveit(name,object,tabs)
 		else
 			return output .. "\n" .. tabs .. "}"
 		end
-
 	end
 
-	return output .. tabs .. "}"
+	return output .. tabs .."}"
 end
