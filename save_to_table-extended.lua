@@ -13,7 +13,7 @@ function saveit(name,object,tabs)
 		return k -- return /leet/	if string
 	end
 
-	local function serializeKey(k,v)
+	local function serializeKey(k)
 		if type(k)=="number" then
 			return "\t"
 		end
@@ -28,21 +28,21 @@ function saveit(name,object,tabs)
 		local valueType = type(v)
 
 		if valueType == "string" then
-			output = output .. tabs .. serializeKey(k,v) .. string.format("%q",v)
+			output = output .. tabs .. serializeKey(k) .. string.format("%q",v)
 		elseif valueType == "table" then
 			output = output .. saveit(serializeKeyForTable(k), v, tabs.."\t")
 		elseif valueType == "number" then
-			output = output .. tabs .. serializeKey(k,v) .. v
+			output = output .. tabs .. serializeKey(k) .. v
 		elseif valueType == "boolean" then
-			output = output .. tabs .. serializeKey(k,v) .. tostring(object[k])
+			output = output .. tabs .. serializeKey(k) .. tostring(v)
 		else
-			output = output .. tabs .. serializeKey(k,v) .. "\"" .. valueType .. ": " .. tostring(object[k]) .. "\"" -- I believe there were good reasons not to use /v/
+			output = output .. tabs .. serializeKey(k) .. "\"" .. valueType .. ": " .. tostring(v) .. "\"" -- I believe there were good reasons not to use /v/
 		end
 		
 		if next(object,k) then
 			output = output .. ",\n"
 		else
-			output = output .. "\n"
+			return output .. "\n" .. tabs .. "}"
 		end
 
 	end
