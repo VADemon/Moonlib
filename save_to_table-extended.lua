@@ -1,7 +1,4 @@
 function saveit(name,object,tabs)
-	local type=type
-	local tostring=tostring
-	local string=string
 	if not tabs then tabs = "" end
 
 	local output = tabs..name.." = {" .. "\n"
