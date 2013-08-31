@@ -7,7 +7,7 @@ function table.serialize(name,object,tabs)
 		if type(k)=="number" then
 			return "[" .. k .. "]" -- return /[1337]/	if number
 		end
-		if string.find(k,"[^A-z_-]") then -- special symbols?
+		if string.find(k,"[^A-z_-]") then --special symbols in it?
 			return "[\"" .. k .. "\"]"
 		end
 		return k -- /leet/	if string
@@ -15,7 +15,7 @@ function table.serialize(name,object,tabs)
 
 	local function serializeKey(k)
 		if type(k)=="number" then
-			return "\t"
+			return "\t[" .. k .."] = "
 		end
 		if string.find(k,"[^A-z_-]") then
 			return "\t[\"" .. k .. "\"] = "
@@ -36,7 +36,7 @@ function table.serialize(name,object,tabs)
 		elseif valueType == "boolean" then
 			output = output .. tabs .. serializeKey(k) .. tostring(v)
 		else
-			output = output .. tabs .. serializeKey(k) .. "\"" .. valueType .. ": " .. tostring(v) .. "\""
+			output = output .. tabs .. serializeKey(k) .. "\"" .. tostring(v) .. "\""
 		end
 		
 		if next(object,k) then
@@ -46,5 +46,5 @@ function table.serialize(name,object,tabs)
 		end
 	end
 
-	return output .. tabs .."}"
+	return output .. tabs .. "}"
 end
