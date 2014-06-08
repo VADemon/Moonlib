@@ -1,30 +1,23 @@
-There are my improved versions of Saving table to a file in Lua.
+There are my improved version of Saving table to a file (aka Serializing) in Lua.
 They're all based on the code snippet by _df_   http://www.forums.evilmana.com/lua-help/save-a-table-to-a-file/msg14319/#msg14319
 
-There're 3 edits:
-- Standard
-- Full
-- Extended
+#### Features:
+* Saving strings, numbers, boolean(s) and tables
+* Human-readable data (with tabs, spaces etc.)
+* When a key is a string without special characters, it won't be inside brackets
 
-Main features:
-* Saving strings, numbers, boolean(s) and tables, inside existing table (if there's a function or other data type - it won't be saved, there will appear just a message)
-* FULL support of Lua syntax: tabs, {}, commas
-* The save file can be loaded with dofile()
-* Already optimized for writing to a file
-* I try to keep it fast (although the Extended version is much slower than Full OR Standard)
-
-Full version's improvements:
-* No unnecessary @!#$ in your save file (see comparison!)
-
-Extended version's improvements:
-* Full version's features
-plus:
-* If a key is a string without special characters, it won't be inside ["..."]
-* If a table has less than *your number here* then it won't be a multi-line table (see comparison)
+* !!! You CANNOT save infinite values ( math.huge )
+#### How-To:
+Arguments
+* Name under which it will be saved | you can also try to write code in here
+* Table object that will be serialized
+* Optional: How many tabs do you want here
 
 
-Visit the wiki for more info!
+#### Example code
+MySerialize = dofile("serialize.lua") -- loads it as function
+serializedTable_string = MySerialize("nameOfMyTable", string, "\t\t\t") 
 
-
-
-VADemon, 06.08.2012
+file = io.open("test", "w")
+file:write( serializedTable_string )
+file:close()
