@@ -41,10 +41,10 @@ return function (name, object, tabs)
 			
 			if next(object,k) then
 				output = output .. ",\n"
-			else
-				return output .. "\n" .. tabs .. "}"
 			end
 		end
+		
+		return output .. "\n" .. tabs .. "}"
 	end
 	
 	return serialize(name, object, tabs)
