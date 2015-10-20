@@ -1,14 +1,14 @@
 -- @param str:	Input string
--- @param delimeter:	Character that separates different words. Default: Space
+-- @param delimiter:	Character that separates different words. Default: Space
 -- @param removeQuotes:	Remove first and last quote characters of a long string word
 
-return function (str, delimeter, removeQuotes)
-	local delimeter = (delimeter and ("[^".. delimeter .."]+")) or "[^ ]+"	-- may lead to problems when using multiliteral delimeters
+return function (str, delimiter, removeQuotes)
+	local delimiter = (delimiter and ("[^".. delimiter .."]+")) or "[^ ]+"	-- may lead to problems when using multiliteral delimiters
 	local wordList = {}
 	local append = false	-- if true, then the currently found word will be appended to the last one
 	local lastUsedQuote = ""	-- make sure we're looking for the same quote char that was used to open the long string: "hello 'i am' here"
 	
-	for word in str:gmatch(delimeter) do
+	for word in str:gmatch(delimiter) do
 
 		if append == false then
 			-- search for a new quoted string beginning: "hello ...
