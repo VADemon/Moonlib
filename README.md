@@ -1,3 +1,7 @@
+## Simple ISO-8859-1 to UTF-8 Converter
+Usage: iso88591_to_utf8( latin-1 string )
+
+
 ##Tokenizer
 The command tokenizer turns a command string into separate arguments.
 
